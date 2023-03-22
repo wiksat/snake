@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .pole {
+            background: url("img/trawa.jpg");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .kula {
+            background: url("img/kula.png");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .krawedz {
+            background: url("img/sciana.jpg");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .waz {
+            background: url("img/waz.png");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .glowag {
+            background: url("img/glowag.jpg");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .ogon {
+            background: url("img/ogon.png");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .owoc {
+            background: url("img/owoc.jpg");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+
+        .zakret {
+            background: url("img/zakret.png");
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            float: left;
+            line-height: 15px;
+            border: 1px solid black;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script>
+        var pom = 0;
+        var gra = document.createElement("div")
+        gra.id = "gra"
+        document.body.appendChild(gra)
+
+        tab = []
+        //scinay w tablicy
+        for (var y = 0; y <= 21; y++) {
+            tab[y] = []
+            for (var x = 0; x <= 21; x++) {
+                tab[y][x] = "s"
+            }
+        }
+        //puste pola
+        for (var y = 1; y <= 20; y++) {
+            for (var x = 1; x <= 20; x++) {
+                tab[y][x] = 0
+            }
+        }
+
+
+        for (var i = 0; i <= 21; i++) {
+            for (var u = 0; u <= 21; u++) {
+                var pole = document.createElement("div")
+                pole.classList = "pole"
+                pole.id = "i_" + i + "_" + u;
+                gra.appendChild(pole)
+
+                if (pom % 22 == 0) pole.style.clear = "both";
+                pom++
+
+                if (pole.id.split("_")[1] == 0) {
+                    pole.classList = "krawedz"
+                }
+                if (pole.id.split("_")[1] == 21) {
+                    pole.classList = "krawedz"
+                }
+                if (pole.id.split("_")[2] == 0) {
+                    pole.classList = "krawedz"
+                }
+                if (pole.id.split("_")[2] == 21) {
+                    pole.classList = "krawedz"
+                }
+            }
+        }
+        function ruch() {
+            for (var y = 1; y <= 20; y++) {
+                for (var x = 1; x <= 20; x++) {
+                    if (tab[y][x] > 0) {
+                        tab[y][x] = tab[y][x] + 1
+                    }
+                }
+            }
+        }
+        function kolizjas() {
+            alert("KOLIZJA ze ścianą - przegrana")
+        }
+
+
+        function losowanie() {
+            for (var t = 0; t < 1; t++) {
+                var y = Math.floor(Math.random() * 20)
+                var x = Math.floor(Math.random() * 20)
+                if (tab[y + 1][x + 1] > 0) {
+                    t--
+                } else {
+                    tab[y + 1][x + 1] = "o"
+                    oy = y + 1
+                    ox = x + 1
+                    document.getElementById("i_" + (y + 1) + "_" + (x + 1)).className = "owoc"
+                }
+            }
+
+        }
+        function owoc() {
+            if (tab[pozy][pozx] == "o") {
+                dl++
+                console.log("zebrano")
+                losowanie()
+            }
+        }
+        losowanie()
+        function newgame() {
+            tab[11][11] = 1
+            dl = 1
+            dir = 0
+            pozx = 11
+            pozy = 11
+            glowa()
+        }
+        newgame()
+        function glowa(kierunek) {
+            for (var y = 1; y <= 20; y++) {
+                for (var x = 1; x <= 20; x++) {
+                    if (dl == 1) {
+                        if (tab[y][x] == 1) {
+                            document.getElementById("i_" + y + "_" + x).className = "kula"
+                        }
+                        if (tab[y][x] > dl) {
+                            tab[y][x] = 0
+                            document.getElementById("i_" + y + "_" + x).className = "pole"
+                            document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                        }
+                    } else {
+                        if (tab[y][x] > dl) {
+                            tab[y][x] = 0
+                            document.getElementById("i_" + y + "_" + x).className = "pole"
+                            document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                        }
+                        if (tab[y][x] == dl) {
+                            document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                        }
+                        if (tab[y][x] > 0) {
+                            document.getElementById("i_" + y + "_" + x).className = "waz"
+                        }
+
+                        if (tab[y][x] == 1) {
+                            document.getElementById("i_" + y + "_" + x).className = "glowag"
+                            if (kierunek == 1) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                            } else if (kierunek == 2) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(90deg)"
+                            } else if (kierunek == 4) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(180deg)"
+                            } else if (kierunek == 3) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(270deg)"
+                            }
+                        }
+                        if (tab[y][x] == dl) {
+                            document.getElementById("i_" + y + "_" + x).className = "ogon"
+                            if (tab[y][x + 1] == dl - 1) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(90deg)"
+                            } else if (tab[y][x - 1] == dl - 1) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(270deg)"
+                            } else if (tab[y + 1][x] == dl - 1) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(180deg)"
+                            } else if (tab[y - 1][x - 1] == dl - 1) {
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                            }
+                        }
+                        if (tab[y][x] > 1 && tab[y][x] < dl) {
+                            // tab[y][x] + 1 == tab[y][x]
+                            // document.getElementById("i_" + y + "_" + x).className = "ogon"
+                            if (tab[y][x] + 1 == tab[y][x + 1] && tab[y - 1][x] + 1 == tab[y][x] || tab[y][x] == tab[y][x + 1] + 1 && tab[y - 1][x] == tab[y][x] + 1) {
+                                document.getElementById("i_" + y + "_" + x).className = "zakret"
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(180deg)"
+                            }
+                            else if (tab[y][x] + 1 == tab[y][x - 1] && tab[y + 1][x] + 1 == tab[y][x] || tab[y][x] == tab[y][x - 1] + 1 && tab[y + 1][x] == tab[y][x] + 1) {
+                                document.getElementById("i_" + y + "_" + x).className = "zakret"
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(0deg)"
+                            }
+                            else if (tab[y][x] + 1 == tab[y][x - 1] && tab[y - 1][x] + 1 == tab[y][x] || tab[y][x] == tab[y][x - 1] + 1 && tab[y - 1][x] == tab[y][x] + 1) {
+                                document.getElementById("i_" + y + "_" + x).className = "zakret"
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(90deg)"
+                            }
+                            else if (tab[y][x] + 1 == tab[y][x + 1] && tab[y + 1][x] + 1 == tab[y][x] || tab[y][x] == tab[y][x + 1] + 1 && tab[y + 1][x] == tab[y][x] + 1) {
+                                document.getElementById("i_" + y + "_" + x).className = "zakret"
+                                document.getElementById("i_" + y + "_" + x).style.transform = "rotate(270deg)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        var flag = true
+        document.addEventListener("keydown", event => {
+            if (flag) {
+                x = window.setInterval(function () {
+                    go(event)
+                }, 200)
+                flag = false
+            } else {
+                clearInterval(x)
+                x = window.setInterval(function () {
+                    go(event)
+                }, 200)
+            }
+        })
+
+
+
+        function go(event) {
+            if (event.keyCode === 87 || event.keyCode === 38) {
+                // gora
+                if (dir != 4) {
+                    if (pozy > 1 && pozy <= 20) {
+                        dir = 1
+                        ruch()
+                        if (tab[pozy - 1][pozx] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozy = pozy - 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                        glowa(dir)
+
+                    }
+                    else {
+                        kolizjas()
+                        newgame()
+                    }
+                } else if (dl == 1) {
+                    if (pozy > 1 && pozy <= 20) {
+                        dir = 1
+                        ruch()
+                        if (tab[pozy - 1][pozx] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozy = pozy - 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                    }
+                    else {
+                        kolizjas()
+                        newgame()
+                    }
+                }
+
+            }
+
+            if (event.keyCode === 68 || event.keyCode === 39) {
+                // prawo
+                if (dir != 3) {
+                    if (pozx >= 1 && pozx < 20) {
+                        dir = 2
+                        ruch()
+                        if (tab[pozy][pozx + 1] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozx = pozx + 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                        glowa(dir)
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                } else if (dl == 1) {
+                    if (pozx >= 1 && pozx < 20) {
+                        dir = 2
+                        ruch()
+                        if (tab[pozy][pozx + 1] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozx = pozx + 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                }
+
+            }
+            if (event.keyCode === 65 || event.keyCode === 37) {
+                // lewo
+                if (dir != 2) {
+                    if (pozx > 1 && pozx <= 20) {
+                        dir = 3
+                        ruch()
+                        if (tab[pozy][pozx - 1] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozx = pozx - 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                        glowa(dir)
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                } else if (dl == 1) {
+                    if (pozx > 1 && pozx <= 20) {
+                        dir = 3
+                        ruch()
+                        if (tab[pozy][pozx - 1] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozx = pozx - 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                }
+            }
+            if (event.keyCode === 83 || event.keyCode === 40) {
+                // dol
+                if (dir != 1) {
+                    if (pozy >= 1 && pozy < 20) {
+                        dir = 4
+                        ruch()
+                        if (tab[pozy + 1][pozx] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozy = pozy + 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                        glowa(dir)
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                } else if (dl == 1) {
+                    if (pozy >= 1 && pozy < 20) {
+                        dir = 4
+                        ruch()
+                        if (tab[pozy + 1][pozx] > 0) {
+                            alert("KOLIZJA z wężem - przegrana")
+                            newgame()
+                        }
+                        pozy = pozy + 1
+                        owoc()
+                        tab[pozy][pozx] = 1
+                    } else {
+                        kolizjas()
+                        newgame()
+                    }
+                }
+
+            }
+        }
+
+    </script>
+</body>
+
+</html>
